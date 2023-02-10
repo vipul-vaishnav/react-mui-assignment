@@ -7,6 +7,7 @@ import Auth from './pages/Auth'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Entry from './components/Entry'
+import { Toaster } from 'react-hot-toast'
 
 const App: React.FC = (): React.ReactElement => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = (): React.ReactElement => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Entry>
+      <Toaster />
     </ThemeProvider>
   )
 }

@@ -2,15 +2,42 @@ import React, { useState, FormEvent, ChangeEvent } from 'react'
 import { Box, Button } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import Input from './Input'
+import { toast } from 'react-hot-toast'
+import { RegisterData } from './Register'
+import { useNavigate } from 'react-router-dom'
 
 const Login: React.FC = (): React.ReactElement => {
+  const localUserData = localStorage.getItem('local_users')
+
+  const navigate = useNavigate()
+
   const [name, setName] = useState<string>('')
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(name)
+
+    if (!name || name.trim().length < 6) {
+      toast.error('Name should be at least 6 characters')
+      return
+    }
+
+    if (localUserData) {
+      const data: RegisterData[] = JSON.parse(localUserData)
+
+      const isNamePresent = data.find((user) => user.name === name)
+
+      if (isNamePresent) {
+        toast.success('User found successfully')
+        navigate('/')
+        setName('')
+      } else {
+        toast.error('User not found')
+      }
+    } else {
+      toast.error('User not found')
+    }
   }
 
   return (

@@ -1,10 +1,12 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { Box, Button, InputAdornment, TextField } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import PhoneIcon from '@mui/icons-material/Phone'
 import Input from './Input'
 import IInput from './interfaces/IInput'
+import { toast } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 export type RegisterData = {
   name: string
@@ -26,6 +28,10 @@ const INPUTS: Input[] = [
 ]
 
 const Register: React.FC = (): React.ReactElement => {
+  const localUserData = localStorage.getItem('local_users')
+
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState<RegisterData>({ name: '', email: '', phone: '' })
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => {
@@ -35,7 +41,51 @@ const Register: React.FC = (): React.ReactElement => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(formData)
+
+    if (!formData.name || formData.name.trim().length < 6) {
+      toast.error('Name should be at least 6 characters')
+      return
+    }
+
+    if (!formData.email) {
+      toast.error('Invalid email address')
+      return
+    }
+
+    if (!formData.phone || formData.phone.trim().length !== 10) {
+      toast.error('Phone number should be 10 characters')
+      return
+    }
+
+    if (isNaN(Number(formData.phone))) {
+      toast.error('Invalid phone number')
+      return
+    }
+
+    if (localUserData) {
+      const data: RegisterData[] = JSON.parse(localUserData)
+
+      const isNamePresent = data.find((user) => user.name === formData.name)
+
+      if (isNamePresent) {
+        toast.error('User already exists, please choose another name')
+        return
+      } else {
+        const userData = [...data]
+        userData.push(formData)
+        localStorage.setItem('local_users', JSON.stringify(userData))
+        toast.success('User added successfully')
+        navigate('/')
+        setFormData({ name: '', email: '', phone: '' })
+      }
+    } else {
+      const userData = []
+      userData.push(formData)
+      localStorage.setItem('local_users', JSON.stringify(userData))
+      toast.success('User added successfully')
+      navigate('/')
+      setFormData({ name: '', email: '', phone: '' })
+    }
   }
 
   return (
