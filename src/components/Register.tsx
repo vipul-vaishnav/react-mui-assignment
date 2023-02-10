@@ -7,6 +7,7 @@ import Input from './Input'
 import IInput from './interfaces/IInput'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import IRegister from './interfaces/IRegister'
 
 export type RegisterData = {
   name: string
@@ -27,7 +28,9 @@ const INPUTS: Input[] = [
   { type: 'phone', name: 'phone', placeholder: '0123456789', icon: PhoneIcon }
 ]
 
-const Register: React.FC = (): React.ReactElement => {
+const Register: React.FC<IRegister> = (props): React.ReactElement => {
+  const { setUser } = props
+
   const localUserData = localStorage.getItem('local_users')
 
   const navigate = useNavigate()
@@ -75,6 +78,7 @@ const Register: React.FC = (): React.ReactElement => {
         userData.push(formData)
         localStorage.setItem('local_users', JSON.stringify(userData))
         toast.success('User added successfully')
+        setUser(formData)
         navigate('/')
         setFormData({ name: '', email: '', phone: '' })
       }
@@ -83,6 +87,7 @@ const Register: React.FC = (): React.ReactElement => {
       userData.push(formData)
       localStorage.setItem('local_users', JSON.stringify(userData))
       toast.success('User added successfully')
+      setUser(formData)
       navigate('/')
       setFormData({ name: '', email: '', phone: '' })
     }

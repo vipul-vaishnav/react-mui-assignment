@@ -3,13 +3,15 @@ import { useLocation, Link } from 'react-router-dom'
 import { Box, Card, Typography, useTheme } from '@mui/material'
 import Register from '../components/Register'
 import Login from '../components/Login'
+import IAuth from './interfaces/IAuth'
 
 export enum AuthLocation {
   login = '/login',
   register = '/register'
 }
 
-const Auth: React.FC = (): React.ReactElement => {
+const Auth: React.FC<IAuth> = (props): React.ReactElement => {
+  const { setUser } = props
   const theme = useTheme()
   const { pathname } = useLocation()
 
@@ -19,7 +21,7 @@ const Auth: React.FC = (): React.ReactElement => {
         <Typography variant="h6" fontWeight={600} mb={3}>
           {pathname === AuthLocation.login ? 'Login' : 'Register'}
         </Typography>
-        {pathname === AuthLocation.login ? <Login /> : <Register />}
+        {pathname === AuthLocation.login ? <Login setUser={setUser} /> : <Register setUser={setUser} />}
         <Typography variant="subtitle2" textAlign="center">
           {pathname === AuthLocation.login ? (
             <>

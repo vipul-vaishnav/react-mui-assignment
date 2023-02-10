@@ -5,8 +5,10 @@ import Input from './Input'
 import { toast } from 'react-hot-toast'
 import { RegisterData } from './Register'
 import { useNavigate } from 'react-router-dom'
+import ILogin from './interfaces/ILogin'
 
-const Login: React.FC = (): React.ReactElement => {
+const Login: React.FC<ILogin> = (props): React.ReactElement => {
+  const { setUser } = props
   const localUserData = localStorage.getItem('local_users')
 
   const navigate = useNavigate()
@@ -32,6 +34,7 @@ const Login: React.FC = (): React.ReactElement => {
         toast.success('User found successfully')
         navigate('/')
         setName('')
+        setUser(isNamePresent)
       } else {
         toast.error('User not found')
       }
