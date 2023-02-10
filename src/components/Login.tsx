@@ -35,6 +35,7 @@ const Login: React.FC<ILogin> = (props): React.ReactElement => {
         navigate('/')
         setName('')
         setUser(isNamePresent)
+        localStorage.setItem('loggedInUser', JSON.stringify(isNamePresent))
       } else {
         toast.error('User not found')
       }

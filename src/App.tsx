@@ -15,13 +15,15 @@ export type User = {
 }
 
 const App: React.FC = (): React.ReactElement => {
-  const [user, setUser] = useState<User | null>(null)
+  const loggedInUser = localStorage.getItem('loggedInUser')
+  const [user, setUser] = useState<User | null>(loggedInUser ? JSON.parse(loggedInUser) : null)
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Entry>
         <Routes>
-          <Route path="/" element={<Home user={user} />} />
+          <Route path="/" element={<Home user={user} setUser={setUser} />} />
           <Route path="/register" element={<Auth setUser={setUser} />} />
           <Route path="/login" element={<Auth setUser={setUser} />} />
           <Route path="/about" element={<About />} />

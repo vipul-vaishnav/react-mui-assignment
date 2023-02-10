@@ -79,6 +79,7 @@ const Register: React.FC<IRegister> = (props): React.ReactElement => {
         localStorage.setItem('local_users', JSON.stringify(userData))
         toast.success('User added successfully')
         setUser(formData)
+        localStorage.setItem('loggedInUser', JSON.stringify(formData))
         navigate('/')
         setFormData({ name: '', email: '', phone: '' })
       }
@@ -87,6 +88,7 @@ const Register: React.FC<IRegister> = (props): React.ReactElement => {
       userData.push(formData)
       localStorage.setItem('local_users', JSON.stringify(userData))
       toast.success('User added successfully')
+      localStorage.setItem('loggedInUser', JSON.stringify(formData))
       setUser(formData)
       navigate('/')
       setFormData({ name: '', email: '', phone: '' })
